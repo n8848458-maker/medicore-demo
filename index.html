@@ -3,1002 +3,148 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Clinic Management System</title>
+<title>MediCore SaaS</title>
+
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Syne:wght@600;700;800&display=swap" rel="stylesheet"/>
+
 <style>
-  :root {
-    --bg: #0d1117;
-    --surface: #161b22;
-    --surface2: #1c2333;
-    --border: #30363d;
-    --green: #2ea87e;
-    --green-soft: #1a3d2f;
-    --green-glow: rgba(46,168,126,0.15);
-    --amber: #e3a04f;
-    --amber-soft: #3d2e1a;
-    --red: #e05c5c;
-    --red-soft: #3d1a1a;
-    --blue: #4f8fe3;
-    --blue-soft: #1a2a3d;
-    --text: #e6edf3;
-    --text-muted: #7d8590;
-    --text-dim: #484f58;
-  }
+body {
+  margin:0;
+  font-family:'DM Sans', sans-serif;
+  background:#0d1117;
+  color:#e6edf3;
+}
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+/* LOGIN */
+#login {
+  height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
 
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    height: 100vh;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+.login-box {
+  width:900px;
+  height:520px;
+  display:flex;
+  background:#161b22;
+  border:1px solid #30363d;
+  border-radius:16px;
+  overflow:hidden;
+}
 
-  /* ── DEMO WRAPPER ───────────────────────────── */
-  .demo-frame {
-    width: 1100px;
-    height: 680px;
-    background: var(--bg);
-    border-radius: 16px;
-    border: 1px solid var(--border);
-    display: flex;
-    overflow: hidden;
-    box-shadow: 0 40px 120px rgba(0,0,0,0.6);
-    animation: frameIn 0.9s cubic-bezier(0.16,1,0.3,1) both;
-  }
+.left {
+  flex:1;
+  background:linear-gradient(135deg,#2ea87e,#1a2a3d);
+  padding:40px;
+  color:white;
+}
 
-  @keyframes frameIn {
-    from { opacity: 0; transform: translateY(30px) scale(0.97); }
-    to   { opacity: 1; transform: translateY(0) scale(1); }
-  }
+.right {
+  flex:1;
+  padding:50px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+}
 
-  /* ── SIDEBAR ───────────────────────────────── */
-  .sidebar {
-    width: 220px;
-    background: var(--surface);
-    border-right: 1px solid var(--border);
-    display: flex;
-    flex-direction: column;
-    padding: 0;
-    flex-shrink: 0;
-  }
+input, select {
+  width:100%;
+  padding:12px;
+  margin-bottom:12px;
+  border-radius:8px;
+  border:1px solid #30363d;
+  background:#0d1117;
+  color:white;
+}
 
-  .logo {
-    padding: 22px 20px 20px;
-    border-bottom: 1px solid var(--border);
-  }
-  .logo-mark {
-    font-family: 'Syne', sans-serif;
-    font-size: 18px;
-    font-weight: 800;
-    color: var(--green);
-    letter-spacing: -0.5px;
-  }
-  .logo-sub {
-    font-size: 10px;
-    color: var(--text-muted);
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    margin-top: 2px;
-  }
+button {
+  width:100%;
+  padding:12px;
+  background:#2ea87e;
+  border:none;
+  border-radius:8px;
+  font-weight:700;
+  cursor:pointer;
+}
 
-  .nav {
-    padding: 14px 12px;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-  }
+/* DASHBOARD */
+#app {
+  display:none;
+  padding:20px;
+}
 
-  .nav-label {
-    font-size: 9px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--text-dim);
-    padding: 10px 8px 6px;
-    margin-top: 6px;
-  }
+.header {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:20px;
+}
 
-  .nav-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 9px 12px;
-    border-radius: 8px;
-    font-size: 13px;
-    color: var(--text-muted);
-    cursor: pointer;
-    transition: all 0.2s ease;
-    position: relative;
-  }
-
-  .nav-item:hover, .nav-item.active {
-    background: var(--green-glow);
-    color: var(--green);
-  }
-  .nav-item.active::before {
-    content: '';
-    position: absolute;
-    left: 0; top: 20%; bottom: 20%;
-    width: 3px;
-    background: var(--green);
-    border-radius: 0 3px 3px 0;
-    left: -12px;
-  }
-
-  .nav-icon {
-    width: 16px;
-    height: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .badge {
-    margin-left: auto;
-    background: var(--amber);
-    color: #000;
-    font-size: 10px;
-    font-weight: 600;
-    padding: 1px 6px;
-    border-radius: 20px;
-    animation: badgePulse 2s ease-in-out infinite;
-  }
-  .badge.red { background: var(--red); color: #fff; }
-
-  @keyframes badgePulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.6; }
-  }
-
-  .alert-item {
-    margin: 0 12px;
-    background: var(--amber-soft);
-    border: 1px solid rgba(227,160,79,0.3);
-    border-radius: 8px;
-    padding: 10px 12px;
-    margin-bottom: 10px;
-    animation: alertPulse 3s ease-in-out infinite;
-  }
-  .alert-label {
-    font-size: 10px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    color: var(--amber);
-    font-weight: 600;
-  }
-  .alert-text {
-    font-size: 11px;
-    color: var(--text-muted);
-    margin-top: 3px;
-    line-height: 1.4;
-  }
-
-  @keyframes alertPulse {
-    0%, 100% { border-color: rgba(227,160,79,0.3); box-shadow: none; }
-    50% { border-color: rgba(227,160,79,0.6); box-shadow: 0 0 12px rgba(227,160,79,0.15); }
-  }
-
-  /* ── MAIN ──────────────────────────────────── */
-  .main {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-  }
-
-  /* Header */
-  .header {
-    padding: 18px 24px;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    background: var(--surface);
-    animation: slideDown 0.6s 0.3s cubic-bezier(0.16,1,0.3,1) both;
-  }
-  @keyframes slideDown {
-    from { opacity: 0; transform: translateY(-10px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-
-  .header-title {
-    font-family: 'Syne', sans-serif;
-    font-size: 17px;
-    font-weight: 700;
-    color: var(--text);
-  }
-  .header-date {
-    font-size: 12px;
-    color: var(--text-muted);
-    margin-left: 2px;
-  }
-
-  .live-dot {
-    width: 8px; height: 8px;
-    border-radius: 50%;
-    background: var(--green);
-    margin-left: auto;
-    animation: livePulse 1.5s ease-in-out infinite;
-  }
-  @keyframes livePulse {
-    0%, 100% { box-shadow: 0 0 0 0 rgba(46,168,126,0.6); }
-    50% { box-shadow: 0 0 0 5px rgba(46,168,126,0); }
-  }
-
-  .live-label {
-    font-size: 11px;
-    color: var(--green);
-    font-weight: 500;
-  }
-
-  .search-bar {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 7px 14px;
-    font-size: 12px;
-    color: var(--text-muted);
-    width: 200px;
-    font-family: 'DM Sans', sans-serif;
-  }
-
-  /* ── KPI STRIP ─────────────────────────────── */
-  .kpi-strip {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 14px;
-    padding: 16px 24px;
-    animation: fadeUp 0.7s 0.4s cubic-bezier(0.16,1,0.3,1) both;
-  }
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(16px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-
-  .kpi-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 14px 16px;
-    transition: transform 0.2s ease, border-color 0.2s ease;
-  }
-  .kpi-card:hover {
-    transform: translateY(-2px);
-    border-color: var(--green);
-  }
-  .kpi-label {
-    font-size: 10px;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    color: var(--text-muted);
-    margin-bottom: 6px;
-  }
-  .kpi-value {
-    font-family: 'Syne', sans-serif;
-    font-size: 26px;
-    font-weight: 700;
-    color: var(--text);
-    line-height: 1;
-  }
-  .kpi-value span {
-    font-size: 13px;
-    color: var(--green);
-    font-family: 'DM Sans', sans-serif;
-    font-weight: 500;
-  }
-  .kpi-bar {
-    margin-top: 10px;
-    height: 3px;
-    background: var(--border);
-    border-radius: 2px;
-    overflow: hidden;
-  }
-  .kpi-fill {
-    height: 100%;
-    border-radius: 2px;
-    background: var(--green);
-    animation: fillGrow 1.2s 0.8s cubic-bezier(0.16,1,0.3,1) both;
-  }
-  @keyframes fillGrow {
-    from { width: 0; }
-  }
-
-  /* ── CONTENT ROW ───────────────────────────── */
-  .content-row {
-    flex: 1;
-    display: grid;
-    grid-template-columns: 1.6fr 1fr;
-    gap: 14px;
-    padding: 0 24px 16px;
-    overflow: hidden;
-    animation: fadeUp 0.8s 0.55s cubic-bezier(0.16,1,0.3,1) both;
-  }
-
-  .panel {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-  }
-
-  .panel-header {
-    padding: 12px 16px;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .panel-title {
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--text);
-    letter-spacing: 0.3px;
-    text-transform: uppercase;
-    font-size: 11px;
-    letter-spacing: 1px;
-  }
-  .panel-count {
-    margin-left: auto;
-    font-size: 11px;
-    color: var(--text-muted);
-  }
-
-  /* ── QUEUE TABLE ───────────────────────────── */
-  .queue-table {
-    flex: 1;
-    overflow-y: auto;
-    scrollbar-width: none;
-  }
-  .queue-table::-webkit-scrollbar { display: none; }
-
-  .queue-head {
-    display: grid;
-    grid-template-columns: 2fr 1.2fr 1fr 1fr 90px;
-    padding: 8px 16px;
-    font-size: 10px;
-    text-transform: uppercase;
-    letter-spacing: 1.2px;
-    color: var(--text-dim);
-    background: var(--surface2);
-    border-bottom: 1px solid var(--border);
-  }
-
-  .queue-row {
-    display: grid;
-    grid-template-columns: 2fr 1.2fr 1fr 1fr 90px;
-    padding: 11px 16px;
-    font-size: 12px;
-    border-bottom: 1px solid var(--border);
-    align-items: center;
-    transition: background 0.15s ease;
-    animation: rowSlideIn 0.4s cubic-bezier(0.16,1,0.3,1) both;
-  }
-  .queue-row:hover { background: var(--surface2); }
-  .queue-row.new-row { background: rgba(46,168,126,0.07); }
-
-  @keyframes rowSlideIn {
-    from { opacity: 0; transform: translateX(-12px); }
-    to   { opacity: 1; transform: translateX(0); }
-  }
-
-  .patient-name { font-weight: 500; color: var(--text); }
-  .patient-id { font-size: 10px; color: var(--text-muted); margin-top: 2px; }
-
-  .status-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    padding: 3px 8px;
-    border-radius: 20px;
-    font-size: 10px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-  .status-pill.ready    { background: rgba(46,168,126,0.15); color: var(--green); }
-  .status-pill.prep     { background: rgba(79,143,227,0.15); color: var(--blue); }
-  .status-pill.waiting  { background: rgba(227,160,79,0.15); color: var(--amber); }
-  .status-pill.new-s    { background: rgba(46,168,126,0.25); color: var(--green); border: 1px solid rgba(46,168,126,0.4); }
-
-  .status-dot {
-    width: 5px; height: 5px;
-    border-radius: 50%;
-    background: currentColor;
-  }
-
-  .action-btn {
-    background: var(--green-soft);
-    border: 1px solid rgba(46,168,126,0.3);
-    color: var(--green);
-    border-radius: 6px;
-    padding: 4px 10px;
-    font-size: 10px;
-    font-weight: 600;
-    cursor: pointer;
-    font-family: 'DM Sans', sans-serif;
-    transition: all 0.15s ease;
-    letter-spacing: 0.5px;
-  }
-  .action-btn:hover {
-    background: var(--green);
-    color: #000;
-    transform: scale(1.04);
-  }
-
-  /* ── RIGHT PANEL ───────────────────────────── */
-  .inventory-list {
-    flex: 1;
-    overflow-y: auto;
-    scrollbar-width: none;
-    padding: 8px 0;
-  }
-  .inventory-list::-webkit-scrollbar { display: none; }
-
-  .inv-item {
-    padding: 10px 16px;
-    border-bottom: 1px solid var(--border);
-    animation: rowSlideIn 0.4s cubic-bezier(0.16,1,0.3,1) both;
-  }
-  .inv-top {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 6px;
-  }
-  .inv-name { font-size: 12px; font-weight: 500; color: var(--text); }
-  .inv-qty { font-size: 11px; color: var(--text-muted); }
-  .inv-qty strong { color: var(--text); }
-  .inv-bar-bg {
-    height: 4px;
-    background: var(--border);
-    border-radius: 2px;
-    overflow: hidden;
-  }
-  .inv-bar-fill {
-    height: 100%;
-    border-radius: 2px;
-    animation: fillGrow 1.4s cubic-bezier(0.16,1,0.3,1) both;
-  }
-  .inv-bar-fill.ok  { background: var(--green); }
-  .inv-bar-fill.low { background: var(--amber); }
-  .inv-bar-fill.crit{ background: var(--red); }
-
-  /* ── MODAL OVERLAY ─────────────────────────── */
-  .modal-overlay {
-    position: absolute;
-    inset: 0;
-    background: rgba(0,0,0,0.6);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 50;
-    border-radius: 16px;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.25s ease;
-    backdrop-filter: blur(3px);
-  }
-  .modal-overlay.show {
-    opacity: 1;
-    pointer-events: all;
-  }
-
-  .modal {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    width: 380px;
-    padding: 0;
-    overflow: hidden;
-    transform: scale(0.88) translateY(20px);
-    transition: transform 0.35s cubic-bezier(0.16,1,0.3,1);
-    box-shadow: 0 30px 80px rgba(0,0,0,0.5);
-  }
-  .modal-overlay.show .modal {
-    transform: scale(1) translateY(0);
-  }
-
-  .modal-header {
-    padding: 18px 20px;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: var(--surface2);
-  }
-  .modal-title {
-    font-family: 'Syne', sans-serif;
-    font-size: 15px;
-    font-weight: 700;
-  }
-  .modal-close {
-    width: 24px; height: 24px;
-    border-radius: 6px;
-    background: var(--border);
-    border: none;
-    color: var(--text-muted);
-    cursor: pointer;
-    font-size: 14px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: monospace;
-    transition: background 0.15s;
-  }
-  .modal-close:hover { background: var(--red); color: #fff; }
-
-  .modal-body { padding: 20px; }
-
-  .modal-field {
-    margin-bottom: 14px;
-  }
-  .modal-field-label {
-    font-size: 10px;
-    text-transform: uppercase;
-    letter-spacing: 1.2px;
-    color: var(--text-muted);
-    margin-bottom: 5px;
-  }
-  .modal-field-value {
-    font-size: 13px;
-    color: var(--text);
-    font-weight: 500;
-  }
-  .modal-field-value.mono {
-    font-family: 'Courier New', monospace;
-    background: var(--surface2);
-    padding: 6px 10px;
-    border-radius: 6px;
-    font-size: 12px;
-    color: var(--green);
-  }
-
-  .modal-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 14px;
-  }
-
-  .verify-btn {
-    width: 100%;
-    padding: 12px;
-    background: var(--green);
-    color: #000;
-    border: none;
-    border-radius: 8px;
-    font-size: 13px;
-    font-weight: 700;
-    cursor: pointer;
-    font-family: 'DM Sans', sans-serif;
-    letter-spacing: 0.5px;
-    transition: all 0.2s ease;
-    margin-top: 6px;
-    position: relative;
-    overflow: hidden;
-  }
-  .verify-btn:hover {
-    background: #38cc96;
-    transform: translateY(-1px);
-    box-shadow: 0 6px 20px rgba(46,168,126,0.35);
-  }
-
-  .verify-btn.verified {
-    background: var(--green);
-    animation: verifyPop 0.5s cubic-bezier(0.36,0.07,0.19,0.97);
-  }
-  @keyframes verifyPop {
-    0%  { transform: scale(1); }
-    30% { transform: scale(0.95); }
-    60% { transform: scale(1.04); }
-    100%{ transform: scale(1); }
-  }
-
-  /* ── COUNTING NUMBERS ──────────────────────── */
-  .count-up {
-    display: inline-block;
-    font-variant-numeric: tabular-nums;
-  }
-
-  /* ── TOAST ─────────────────────────────────── */
-  .toast {
-    position: absolute;
-    bottom: 24px;
-    right: 24px;
-    background: var(--green);
-    color: #000;
-    padding: 10px 18px;
-    border-radius: 10px;
-    font-size: 12px;
-    font-weight: 700;
-    z-index: 100;
-    transform: translateY(60px);
-    opacity: 0;
-    transition: all 0.35s cubic-bezier(0.16,1,0.3,1);
-    pointer-events: none;
-    box-shadow: 0 8px 30px rgba(46,168,126,0.4);
-  }
-  .toast.show {
-    transform: translateY(0);
-    opacity: 1;
-  }
+.card {
+  background:#161b22;
+  padding:20px;
+  border-radius:10px;
+  border:1px solid #30363d;
+  margin-bottom:10px;
+}
 </style>
 </head>
+
 <body>
 
-<div class="demo-frame" style="position:relative;">
+<!-- LOGIN -->
+<div id="login">
+  <div class="login-box">
 
-  <!-- SIDEBAR -->
-  <aside class="sidebar">
-    <div class="logo">
-      <div class="logo-mark">MediCore</div>
-      <div class="logo-sub">Clinic Management</div>
+    <div class="left">
+      <h1>MediCore SaaS</h1>
+      <p>Clinic Management System</p>
+      <img src="https://images.unsplash.com/photo-1580281657527-47f249e8f8c1"
+           style="width:100%;border-radius:10px;margin-top:20px;">
     </div>
 
-    <nav class="nav">
-      <span class="nav-label">Main</span>
+    <div class="right">
+      <h2>Welcome Back</h2>
 
-      <div class="nav-item active">
-        <span class="nav-icon">
-          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-        </span>
-        Dashboard
-      </div>
+      <input id="email" placeholder="Email" />
+      <select id="role">
+        <option value="admin">Admin</option>
+        <option value="doctor">Doctor</option>
+        <option value="pharmacist">Pharmacist</option>
+      </select>
 
-      <div class="nav-item">
-        <span class="nav-icon">
-          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-        </span>
-        Patients
-        <span class="badge">3</span>
-      </div>
-
-      <div class="nav-item">
-        <span class="nav-icon">
-          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h4"/></svg>
-        </span>
-        Prescriptions
-      </div>
-
-      <div class="nav-item">
-        <span class="nav-icon">
-          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M3 3h18v18H3zM3 9h18M9 21V9"/></svg>
-        </span>
-        Inventory
-        <span class="badge red">!</span>
-      </div>
-
-      <div class="nav-item">
-        <span class="nav-icon">
-          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-        </span>
-        Reports
-      </div>
-
-      <span class="nav-label">Settings</span>
-      <div class="nav-item">
-        <span class="nav-icon">
-          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-        </span>
-        Settings
-      </div>
-    </nav>
-
-    <!-- Low stock alert -->
-    <div class="alert-item">
-      <div class="alert-label">Low Stock Alert</div>
-      <div class="alert-text">Amoxicillin 500mg — only 12 units remaining</div>
-    </div>
-  </aside>
-
-  <!-- MAIN -->
-  <main class="main">
-
-    <!-- Header -->
-    <div class="header">
-      <div>
-        <div class="header-title">Patient Queue</div>
-        <div class="header-date">Saturday, April 18, 2026</div>
-      </div>
-      <input class="search-bar" placeholder="Search patient or ID..." />
-      <div class="live-label">Live</div>
-      <div class="live-dot"></div>
+      <button onclick="login()">Continue to Dashboard</button>
     </div>
 
-    <!-- KPI Strip -->
-    <div class="kpi-strip">
-      <div class="kpi-card">
-        <div class="kpi-label">Total Patients</div>
-        <div class="kpi-value"><span class="count-up" data-target="124">0</span> <span>today</span></div>
-        <div class="kpi-bar"><div class="kpi-fill" style="width:78%"></div></div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-label">Awaiting</div>
-        <div class="kpi-value"><span class="count-up" data-target="8">0</span> <span>queue</span></div>
-        <div class="kpi-bar"><div class="kpi-fill" style="width:40%"></div></div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-label">Ready Pickup</div>
-        <div class="kpi-value"><span class="count-up" data-target="31">0</span> <span>orders</span></div>
-        <div class="kpi-bar"><div class="kpi-fill" style="width:62%"></div></div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-label">Avg. Wait</div>
-        <div class="kpi-value"><span class="count-up" data-target="14">0</span> <span>min</span></div>
-        <div class="kpi-bar"><div class="kpi-fill" style="width:28%; background: var(--amber)"></div></div>
-      </div>
-    </div>
+  </div>
+</div>
 
-    <!-- Content -->
-    <div class="content-row">
+<!-- DASHBOARD -->
+<div id="app">
 
-      <!-- Queue Panel -->
-      <div class="panel">
-        <div class="panel-header">
-          <div class="panel-title">Active Orders</div>
-          <div class="panel-count" id="queue-count">6 orders</div>
-        </div>
-        <div class="queue-table">
-          <div class="queue-head">
-            <div>Patient</div>
-            <div>Medication</div>
-            <div>Time</div>
-            <div>Status</div>
-            <div>Action</div>
-          </div>
-          <div id="queue-body"></div>
-        </div>
-      </div>
-
-      <!-- Inventory Panel -->
-      <div class="panel">
-        <div class="panel-header">
-          <div class="panel-title">Inventory</div>
-          <div class="panel-count">12 items</div>
-        </div>
-        <div class="inventory-list" id="inv-list"></div>
-      </div>
-
-    </div>
-
-  </main>
-
-  <!-- MODAL -->
-  <div class="modal-overlay" id="modal">
-    <div class="modal">
-      <div class="modal-header">
-        <div class="modal-title" id="modal-patient">Order Details</div>
-        <button class="modal-close" onclick="closeModal()">X</button>
-      </div>
-      <div class="modal-body">
-        <div class="modal-row">
-          <div class="modal-field">
-            <div class="modal-field-label">Patient ID</div>
-            <div class="modal-field-value mono" id="modal-id">MC-00421</div>
-          </div>
-          <div class="modal-field">
-            <div class="modal-field-label">Physician</div>
-            <div class="modal-field-value" id="modal-doc">Dr. Santos</div>
-          </div>
-        </div>
-        <div class="modal-field">
-          <div class="modal-field-label">Prescribed Medication</div>
-          <div class="modal-field-value" id="modal-med">Amoxicillin 500mg x 30 tabs</div>
-        </div>
-        <div class="modal-row">
-          <div class="modal-field">
-            <div class="modal-field-label">Batch Number</div>
-            <div class="modal-field-value mono" id="modal-batch">BT-2026-0891</div>
-          </div>
-          <div class="modal-field">
-            <div class="modal-field-label">Expiry</div>
-            <div class="modal-field-value" id="modal-expiry">Jan 2028</div>
-          </div>
-        </div>
-        <div class="modal-field">
-          <div class="modal-field-label">Current Status</div>
-          <div class="modal-field-value" id="modal-status" style="color:var(--amber)">In Preparation</div>
-        </div>
-        <button class="verify-btn" id="verify-btn" onclick="verifyOrder()">Verify and Mark Ready</button>
-      </div>
-    </div>
+  <div class="header">
+    <h2>Dashboard</h2>
+    <button onclick="logout()">Logout</button>
   </div>
 
-  <!-- TOAST -->
-  <div class="toast" id="toast">Order marked as Ready for Pickup</div>
+  <div class="card">Patients: 124</div>
+  <div class="card">Queue: 8 waiting</div>
+  <div class="card">Inventory: OK</div>
+
 </div>
 
 <script>
-// ── DATA ────────────────────────────────────────
-const patients = [
-  { name: "Maria Santos",   id: "MC-00421", med: "Amoxicillin 500mg x30", time: "08:14", status: "prep",    doc: "Dr. Cruz",   batch: "BT-2026-0891", expiry: "Jan 2028" },
-  { name: "Jose Reyes",     id: "MC-00398", med: "Metformin 500mg x60",   time: "08:32", status: "ready",   doc: "Dr. Santos", batch: "BT-2026-0743", expiry: "Mar 2027" },
-  { name: "Ana Lim",        id: "MC-00455", med: "Losartan 50mg x30",     time: "08:47", status: "waiting", doc: "Dr. Rivera", batch: "BT-2026-0812", expiry: "Jun 2028" },
-  { name: "Carlos Tan",     id: "MC-00412", med: "Cetirizine 10mg x20",   time: "09:01", status: "ready",   doc: "Dr. Cruz",   batch: "BT-2026-0656", expiry: "Dec 2027" },
-  { name: "Elena Mendoza",  id: "MC-00467", med: "Amlodipine 5mg x30",    time: "09:18", status: "prep",    doc: "Dr. Santos", batch: "BT-2026-0922", expiry: "Aug 2028" },
-  { name: "Ramon Dela Cruz",id: "MC-00478", med: "Paracetamol 500mg x12", time: "09:30", status: "waiting", doc: "Dr. Rivera", batch: "BT-2026-0945", expiry: "Apr 2027" },
-];
-
-const inventory = [
-  { name: "Amoxicillin 500mg",  qty: 12,  max: 200, level: "crit" },
-  { name: "Metformin 500mg",    qty: 85,  max: 200, level: "ok"   },
-  { name: "Losartan 50mg",      qty: 34,  max: 150, level: "low"  },
-  { name: "Cetirizine 10mg",    qty: 140, max: 200, level: "ok"   },
-  { name: "Amlodipine 5mg",     qty: 28,  max: 100, level: "low"  },
-  { name: "Paracetamol 500mg",  qty: 180, max: 200, level: "ok"   },
-  { name: "Omeprazole 20mg",    qty: 55,  max: 150, level: "ok"   },
-];
-
-// ── LABELS ──────────────────────────────────────
-const statusLabel = { prep: "In Prep", ready: "Ready", waiting: "Waiting", new: "New" };
-const statusClass = { prep: "prep", ready: "ready", waiting: "waiting", new: "new-s" };
-
-// ── RENDER QUEUE ─────────────────────────────────
-function renderQueue(list) {
-  const body = document.getElementById('queue-body');
-  body.innerHTML = '';
-  list.forEach((p, i) => {
-    const row = document.createElement('div');
-    row.className = 'queue-row' + (p.status === 'new' ? ' new-row' : '');
-    row.style.animationDelay = (i * 0.07) + 's';
-    row.innerHTML = `
-      <div>
-        <div class="patient-name">${p.name}</div>
-        <div class="patient-id">${p.id}</div>
-      </div>
-      <div style="font-size:12px;color:var(--text-muted)">${p.med}</div>
-      <div style="font-size:12px;color:var(--text-muted)">${p.time}</div>
-      <div><span class="status-pill ${statusClass[p.status]}">
-        <span class="status-dot"></span>${statusLabel[p.status]}
-      </span></div>
-      <div><button class="action-btn" onclick="openModal(${i})">Open</button></div>
-    `;
-    body.appendChild(row);
-  });
-  document.getElementById('queue-count').textContent = list.length + ' orders';
+function login() {
+  document.getElementById("login").style.display = "none";
+  document.getElementById("app").style.display = "block";
 }
 
-// ── RENDER INVENTORY ─────────────────────────────
-function renderInventory() {
-  const list = document.getElementById('inv-list');
-  list.innerHTML = '';
-  inventory.forEach((item, i) => {
-    const pct = Math.round((item.qty / item.max) * 100);
-    const el = document.createElement('div');
-    el.className = 'inv-item';
-    el.style.animationDelay = (i * 0.08) + 's';
-    el.innerHTML = `
-      <div class="inv-top">
-        <div class="inv-name">${item.name}</div>
-        <div class="inv-qty"><strong>${item.qty}</strong>/${item.max}</div>
-      </div>
-      <div class="inv-bar-bg">
-        <div class="inv-bar-fill ${item.level}" style="width:${pct}%;animation-delay:${i*0.1}s"></div>
-      </div>
-    `;
-    list.appendChild(el);
-  });
+function logout() {
+  document.getElementById("login").style.display = "flex";
+  document.getElementById("app").style.display = "none";
 }
-
-// ── MODAL ────────────────────────────────────────
-let activeIdx = -1;
-
-function openModal(idx) {
-  activeIdx = idx;
-  const p = patients[idx];
-  document.getElementById('modal-patient').textContent = p.name;
-  document.getElementById('modal-id').textContent = p.id;
-  document.getElementById('modal-doc').textContent = p.doc;
-  document.getElementById('modal-med').textContent = p.med;
-  document.getElementById('modal-batch').textContent = p.batch;
-  document.getElementById('modal-expiry').textContent = p.expiry;
-  const statusEl = document.getElementById('modal-status');
-  const btn = document.getElementById('verify-btn');
-  if (p.status === 'ready') {
-    statusEl.textContent = 'Ready for Pickup';
-    statusEl.style.color = 'var(--green)';
-    btn.textContent = 'Already Verified';
-    btn.style.opacity = '0.5';
-    btn.style.pointerEvents = 'none';
-  } else {
-    statusEl.textContent = p.status === 'waiting' ? 'Waiting' : 'In Preparation';
-    statusEl.style.color = 'var(--amber)';
-    btn.textContent = 'Verify and Mark Ready';
-    btn.style.opacity = '1';
-    btn.style.pointerEvents = 'all';
-  }
-  document.getElementById('modal').classList.add('show');
-}
-
-function closeModal() {
-  document.getElementById('modal').classList.remove('show');
-}
-
-function verifyOrder() {
-  if (activeIdx === -1) return;
-  const btn = document.getElementById('verify-btn');
-  btn.textContent = 'Verified!';
-  btn.classList.add('verified');
-  document.getElementById('modal-status').textContent = 'Ready for Pickup';
-  document.getElementById('modal-status').style.color = 'var(--green)';
-
-  patients[activeIdx].status = 'ready';
-  renderQueue(patients);
-
-  setTimeout(() => {
-    closeModal();
-    showToast();
-    activeIdx = -1;
-  }, 700);
-}
-
-function showToast() {
-  const t = document.getElementById('toast');
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 3000);
-}
-
-// ── COUNT-UP ANIMATION ───────────────────────────
-function countUp(el) {
-  const target = parseInt(el.dataset.target, 10);
-  const duration = 1200;
-  const start = performance.now();
-  function step(now) {
-    const progress = Math.min((now - start) / duration, 1);
-    const ease = 1 - Math.pow(1 - progress, 3);
-    el.textContent = Math.floor(ease * target);
-    if (progress < 1) requestAnimationFrame(step);
-    else el.textContent = target;
-  }
-  requestAnimationFrame(step);
-}
-
-// ── NEW ORDER SIMULATION ──────────────────────────
-function simulateNewOrder() {
-  const newOrder = {
-    name: "Patricia Gomez",
-    id: "MC-00491",
-    med: "Ibuprofen 400mg x10",
-    time: new Date().toLocaleTimeString('en-PH', {hour:'2-digit',minute:'2-digit',hour12:false}),
-    status: "new",
-    doc: "Dr. Cruz",
-    batch: "BT-2026-1001",
-    expiry: "Sep 2028"
-  };
-  patients.unshift(newOrder);
-  if (patients.length > 7) patients.pop();
-  renderQueue(patients);
-}
-
-// ── STATUS CYCLE ─────────────────────────────────
-function cycleStatuses() {
-  patients.forEach(p => {
-    if (p.status === 'new') p.status = 'waiting';
-    else if (p.status === 'waiting') p.status = 'prep';
-  });
-  renderQueue(patients);
-}
-
-// ── INIT ──────────────────────────────────────────
-renderQueue(patients);
-renderInventory();
-
-setTimeout(() => {
-  document.querySelectorAll('.count-up').forEach(el => countUp(el));
-}, 500);
-
-// Simulate a new order after 4 seconds
-setTimeout(simulateNewOrder, 4000);
-// Cycle some statuses at 8 seconds
-setTimeout(cycleStatuses, 8000);
-// Another new order at 13 seconds
-setTimeout(simulateNewOrder, 13000);
 </script>
+
 </body>
 </html>
